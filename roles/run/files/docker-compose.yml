@@ -1,0 +1,76 @@
+networks:
+  inception_network:
+    driver: bridge
+
+volumes:
+  mariadb_volume:
+    name: mariadb_volume
+
+  phpmyadmin_volume:
+    name: phpmyadmin_volume
+
+  wordpress_volume:
+    name: wordpress_volume
+
+services:
+  mariadb:
+    image: mariadb:1.0
+    container_name: mariadb
+    build: ./mariadb/
+    env_file:
+      - .env.local
+    networks:
+      - inception_network
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u$$DB_USER", "-p$$DB_PASS"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  phpmyadmin:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    image: phpmyadmin:fpm
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=mariadb
+    networks:
+      - inception_network
+    volumes:
+      - phpmyadmin_volume:/var/www/html
+    restart: always
+
+  wordpress:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    image: wordpress:1.0
+    container_name: wordpress
+    build: ./wordpress/
+    env_file:
+      - .env.local
+    networks:
+      - inception_network
+    volumes:
+      - wordpress_volume:/var/www/wordpress
+    restart: always
+
+  nginx:
+    depends_on:
+      - wordpress
+      - phpmyadmin
+    image: nginx:1.0
+    container_name: nginx
+    build: ./nginx/
+    ports:
+      - "443:443"
+    networks:
+      - inception_network
+    volumes:
+      - wordpress_volume:/var/www/wordpress
+      - phpmyadmin_volume:/var/www/html
+    restart: always

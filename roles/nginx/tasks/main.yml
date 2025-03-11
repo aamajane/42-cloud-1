@@ -1,0 +1,4 @@
+- name: Copy nginx files
+  copy:
+    src: files/
+    dest: $HOME/application/nginx

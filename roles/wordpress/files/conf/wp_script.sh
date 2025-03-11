@@ -3,7 +3,7 @@ sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" /etc/php8/php-fpm.d/www.conf
 
 # Create wp-config.php file if it doesn't exist yet
 if [ ! -f wp-config.php &>/dev/null ]; then
-	wp config create --dbhost=$DB_HOST \
+	wp config create --dbhost=mariadb \
 					 --dbname=$DB_NAME \
 					 --dbuser=$DB_USER \
 					 --dbpass=$DB_PASS

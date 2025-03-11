@@ -1,0 +1,14 @@
+- name: Copy docker-compose file
+  copy:
+    src: docker-compose.yml
+    dest: $HOME/application/docker-compose.yml
+
+- name: Copy .env.local file
+  copy:
+    src: .env.local
+    dest: $HOME/application/.env.local
+
+- name: Run docker-compose file to start services
+  shell: "sudo docker-compose up --build -d"
+  args:
+    chdir: $HOME/application

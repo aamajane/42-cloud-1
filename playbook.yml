@@ -1,0 +1,62 @@
+- name: Setuping
+  hosts: all
+  become: true
+  become_user: root
+  roles:
+    - setup
+
+- name: Copying
+  hosts: all
+  roles:
+    - mariadb
+    - wordpress
+    - nginx
+  tags: copy
+
+- name: Running
+  hosts: all
+  roles:
+    - run
+
+- name: Downing
+  hosts: all
+  tasks:
+    - name: Stop docker-compose file
+      shell: "sudo docker-compose down"
+      args:
+        chdir: $HOME/application
+  tags: down
+
+- name: Starting
+  hosts: all
+  tasks:
+    - name: Start docker-compose file
+      shell: "sudo docker-compose up -d"
+      args:
+        chdir: $HOME/application
+  tags: start
+
+- name: Restarting
+  hosts: all
+  tasks:
+    - name: Restart mariadb
+      shell: "sudo docker-compose restart mariadb"
+      args:
+        chdir: $HOME/application
+      tags: restart-mariadb
+    - name: Restart phpmyadmin
+      shell: "sudo docker-compose restart phpmyadmin"
+      args:
+        chdir: $HOME/application
+      tags: restart-phpmyadmin
+    - name: Restart wordpress
+      shell: "sudo docker-compose restart wordpress"
+      args:
+        chdir: $HOME/application
+      tags: restart-wordpress
+    - name: Restart nginx
+      shell: "sudo docker-compose restart nginx"
+      args:
+        chdir: $HOME/application
+      tags: restart-nginx
+  tags: restart

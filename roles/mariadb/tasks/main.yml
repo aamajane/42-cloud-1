@@ -1,0 +1,4 @@
+- name: Copy mariadb files
+  copy:
+    src: files/
+    dest: $HOME/application/mariadb

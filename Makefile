@@ -1,13 +1,14 @@
-all:
-		docker-compose -f ./srcs/docker-compose.yml up --build
+setup-and-run:
+	ansible-playbook -i inventory.yml playbook.yml --skip-tags "down,start,restart"
 
-clean:
-		docker-compose -f ./srcs/docker-compose.yml down --volumes
-		docker image prune -af
+copy:
+	ansible-playbook -i inventory.yml playbook.yml --tags copy
 
-fclean: clean
-		docker system prune -af
+down:
+	ansible-playbook -i inventory.yml playbook.yml --tags down
 
-re:		fclean all
+start:
+	ansible-playbook -i inventory.yml playbook.yml --tags start
 
-.PHONY:	all clean fclean re
+restart:
+	ansible-playbook -i inventory.yml playbook.yml --tags restart

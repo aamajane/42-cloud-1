@@ -8,8 +8,8 @@ FROM alpine:3.16
 RUN apk update && \
 	apk upgrade && \
 	apk add nginx openssl && \
-	openssl req -newkey rsa:2048 -nodes -keyout /etc/ssl/private/aamajane.42.fr.key \
-	-x509 -days 365 -subj "/CN=aamajane.42.fr" -out /etc/ssl/certs/aamajane.42.fr.crt
+	openssl req -newkey rsa:2048 -nodes -keyout /etc/ssl/private/cloud.key \
+	-x509 -days 365 -subj "/CN=cloud-1" -out /etc/ssl/certs/cloud.crt
 
 # Copy the default Nginx configuration file into the image's appropriate location
 COPY ./conf/default.conf /etc/nginx/http.d

@@ -1,0 +1,4 @@
+- name: Copy wordpress files
+  copy:
+    src: files/
+    dest: $HOME/application/wordpress
