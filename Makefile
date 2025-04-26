@@ -1,3 +1,6 @@
+test:
+	ansible-playbook -i inventory.yml playbook.yml --tags test
+
 setup-and-run:
 	ansible-playbook -i inventory.yml playbook.yml --skip-tags "down,start,restart"
 

@@ -1,3 +1,10 @@
+- name: Testing
+  hosts: all
+  tasks:
+    - name: Create file
+      shell: "echo 'HELLO' > $HOME/zakaria.txt"
+  tags: test
+
 - name: Setuping
   hosts: all
   become: true

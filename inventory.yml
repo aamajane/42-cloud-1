@@ -4,4 +4,3 @@ ungrouped:
       ansible_host: 192.168.56.56
       ansible_user: vagrant
       ansible_ssh_private_key_file: .vagrant/machines/zzz/virtualbox/private_key
-      ansible_port: 22
